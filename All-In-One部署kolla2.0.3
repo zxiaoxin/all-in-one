@@ -1,4 +1,14 @@
-物理机环境准备:
+kolla项目目前更新到3.0.0，而本实验部署的是kolla的tag2.0.3
+
+虚拟机基本环境：
+
+centos7.2双网卡
+docker版本：1.12.1
+ansible：1.9.4 #在2.0.3上ansible的版本不能高于2.0.0，在3.0.0上是允许的
+IP：192.168.101.46
+主机名：localhost
+
+
 systemctl stop firewalld && systemctl disable firewalld
 #实验环境下不想麻烦直接关闭防火墙了，如果是在服务器上要配置iptables保证安全
 
@@ -14,7 +24,29 @@ yum install -y python-devel libffi-devel openssl-devel gcc vim git python-setupt
 pip install -U ansible==1.9.4 #在这边ansible的版本不要高于2.0.0，不然在kolla-ansible检测时会报错
 
 安装docker：
-curl -sSL https://get.docker.io | bash #版本是1.12.1 
+curl -sSL https://get.docker.io | bash #版本是1.12.1, build 23cf638 
+
+[root@localhost ~]# curl -sSL https://get.docker.io | bash
++ sh -c 'sleep 3; yum -y -q install docker-engine'
+warning: /var/cache/yum/x86_64/7/docker-main-repo/packages/docker-engine-selinux-1.12.1-1.el7.centos.noarch.rpm: Header V4 RSA/SHA512 Signature, key ID 2c52609d: NOKEY
+docker-engine-selinux-1.12.1-1.el7.centos.noarch.rpm 的公钥尚未安装
+导入 GPG key 0x2C52609D:
+ 用户ID     : "Docker Release Tool (releasedocker) <docker@docker.com>"
+ 指纹       : 5811 8e89 f3a9 1289 7c07 0adb f762 2157 2c52 609d
+ 来自       : https://yum.dockerproject.org/gpg
+restorecon:  lstat(/var/lib/docker) failed:  No such file or directory
+warning: %post(docker-engine-selinux-1.12.1-1.el7.centos.noarch) scriptlet failed, exit status 255
+Non-fatal POSTIN scriptlet failure in rpm package docker-engine-selinux-1.12.1-1.el7.centos.noarch
+
+If you would like to use Docker as a non-root user, you should now consider
+adding your user to the "docker" group with something like:
+
+  sudo usermod -aG docker your-user
+
+Remember that you will have to log out and back in for this to take effect!
+
+[root@localhost ~]# docker --version
+Docker version 1.12.1, build 23cf638
 
 配置docker文件，启动MountFlags选项，默认未开启，未配置会在deploy时 neutron-dhcp-agent容器抛出APIError/HTTPError：
 mkdir -p /etc/systemd/system/docker.service.d
@@ -26,6 +58,9 @@ EOF
 
 加载配置文件设置自启，并启动docker服务：
 systemctl daemon-reload && systemctl enable docker && systemctl start docker
+
+[root@localhost ~]# systemctl daemon-reload && systemctl enable docker && systemctl start docker
+Created symlink from /etc/systemd/system/multi-user.target.wants/docker.service to /usr/lib/systemd/system/docker.service.
 
 下载kolla代码：
 git clone https://git.openstack.org/openstack/kolla -b stable/mitaka
