@@ -16,7 +16,7 @@ pip install -U ansible==1.9.4 #在这边ansible的版本不要高于2.0.0，不�
 安装docker：
 curl -sSL https://get.docker.io | bash #版本是1.12.1 
 
-配置docker文件，启动MountFlags选项，默认未开启：
+配置docker文件，启动MountFlags选项，默认未开启，未配置会在deploy时 neutron-dhcp-agent容器抛出APIError/HTTPError：
 mkdir -p /etc/systemd/system/docker.service.d
 
 tee /etc/systemd/system/docker.service.d/kolla.conf <<-'EOF'
@@ -27,30 +27,32 @@ EOF
 加载配置文件设置自启，并启动docker服务：
 systemctl daemon-reload && systemctl enable docker && systemctl start docker
 
+下载kolla代码：
 git clone https://git.openstack.org/openstack/kolla -b stable/mitaka
-#有时候这样git会比较慢，可以先git在切换到分支
-#git clone https://git.openstack.org/openstack/kolla
-#cd kolla
-#git checkout stable/mitaka
-cd /root
 
+安装kolla：
 pip install kolla/ 
 
 cd kolla/
 
+安装tox：
 pip install -U tox
 
+安装openstackclient跟neutronclient
 pip install -U python-openstackclient python-neutronclient
 
+安装依赖
 pip install -r requirements.txt -r test-requirements.txt
 
+生成kolla-build.conf配置文件：
 tox -e genconfig
 
+复制配置文件到/etc目录下
 cp -rv etc/kolla /etc/
 
 kolla-build --base centos --type source -p default
 #这边选择build基础的镜像，如果业务上需求，去掉-p default就build全部
-#如果出现build错误，可以单独build
+#如果出现build错误，可以单独build，
 #镜像下来，就完成一大步啦
 
 vim /etc/kolla/passwords.yml
