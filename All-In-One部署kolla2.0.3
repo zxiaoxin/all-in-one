@@ -1,0 +1,80 @@
+物理机环境准备:
+systemctl stop firewalld && systemctl disable firewalld
+#实验环境下不想麻烦直接关闭防火墙了，如果是在服务器上要配置iptables保证安全
+
+vim /etc/hosts
+192.168.101.46 localhost
+127.0.0.1 localhost
+
+yum install -y epel-release 
+
+yum install -y python-pip
+
+pip install --upgrade pip
+
+yum install -y python-devel libffi-devel openssl-devel gcc vim git python-setuptools wget
+
+pip install -U ansible==1.9.4 
+
+curl -sSL https://get.docker.io | bash  
+
+mkdir -p /etc/systemd/system/docker.service.d
+
+tee /etc/systemd/system/docker.service.d/kolla.conf <<-'EOF'
+[Service]
+MountFlags=shared
+EOF
+
+systemctl daemon-reload && systemctl enable docker && systemctl start docker
+
+git clone https://git.openstack.org/openstack/kolla -b stable/mitaka
+#有时候这样git会比较慢，可以先git在切换到分支
+#git clone https://git.openstack.org/openstack/kolla
+#cd kolla
+#git checkout stable/mitaka
+cd /root
+
+pip install kolla/ 
+
+cd kolla/
+
+pip install -U tox
+
+pip install -U python-openstackclient python-neutronclient
+
+pip install -r requirements.txt -r test-requirements.txt
+
+tox -e genconfig
+
+cp -rv etc/kolla /etc/
+
+kolla-build --base centos --type source -p default
+#这边选择build基础的镜像，如果业务上需求，去掉-p default就build全部
+#如果出现build错误，可以单独build
+#镜像下来，就完成一大步啦
+
+vim /etc/kolla/passwords.yml
+kolla_install_type: "source"
+kolla_internal_address: "192.168.101.147" #这个IP要跟端口同一个网段并且未被使用
+network_interface: "enp4s0.2"
+neutron_external_interface: "enp4s0.3"
+
+kolla-genpwd
+#生成密码，也可以自己去配置
+
+kolla-ansible prechecks
+#检查端口，IP，ansible等配置
+
+kolla-ansible deploy #开始部署容器
+#没有错误就是成功啦
+
+kolla-ansible post-deploy
+
+cat /etc/kolla/admin-openrc.sh 
+#查看dashboard的登录信息
+
+sourch /etc/kolla/admin-openrc.sh
+
+kolla/tools/init-runonce
+#初始化一个镜像跟网络
+
