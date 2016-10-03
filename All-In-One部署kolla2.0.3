@@ -23,6 +23,39 @@ yum install -y python-devel libffi-devel openssl-devel gcc vim git python-setupt
 安装ansible1.9.6：
 yum install ansible1.9.noarch #在这边ansible的版本不要高于2.0.0，不然在kolla-ansible检测时会报错
 
+[root@CentOS ~]# yum install ansible1.9.noarch
+Loaded plugins: fastestmirror, langpacks
+Loading mirror speeds from cached hostfile
+ * base: mirrors.aliyun.com
+ * epel: mirror01.idc.hinet.net
+ * extras: mirrors.aliyun.com
+ * updates: mirrors.aliyun.com
+Resolving Dependencies
+--> Running transaction check
+---> Package ansible1.9.noarch 0:1.9.6-2.el7 will be installed
+--> Processing Dependency: sshpass for package: ansible1.9-1.9.6-2.el7.noarch
+--> Processing Dependency: python-paramiko for package: ansible1.9-1.9.6-2.el7.noarch
+--> Processing Dependency: python-keyczar for package: ansible1.9-1.9.6-2.el7.noarch
+--> Processing Dependency: python-jinja2 for package: ansible1.9-1.9.6-2.el7.noarch
+--> Processing Dependency: python-httplib2 for package: ansible1.9-1.9.6-2.el7.noarch
+--> Processing Dependency: PyYAML for package: ansible1.9-1.9.6-2.el7.noarch
+--> Running transaction check
+---> Package PyYAML.x86_64 0:3.10-11.el7 will be installed
+.......
+Installed:
+  ansible1.9.noarch 0:1.9.6-2.el7                                                                                                                                      
+
+Dependency Installed:
+  PyYAML.x86_64 0:3.10-11.el7                libtomcrypt.x86_64 0:1.17-23.el7         libtommath.x86_64 0:0.42.0-4.el7        libyaml.x86_64 0:0.1.4-11.el7_0        
+  python-babel.noarch 0:0.9.6-8.el7          python-httplib2.noarch 0:0.7.7-3.el7     python-jinja2.noarch 0:2.7.2-2.el7      python-keyczar.noarch 0:0.71c-2.el7    
+  python-markupsafe.x86_64 0:0.11-10.el7     python-pyasn1.noarch 0:0.1.6-2.el7       python2-crypto.x86_64 0:2.6.1-9.el7     python2-ecdsa.noarch 0:0.13-4.el7      
+  python2-paramiko.noarch 0:1.16.1-1.el7     sshpass.x86_64 0:1.05-5.el7             
+
+Complete!
+[root@CentOS ~]# ansible --version
+ansible 1.9.6
+  configured module search path = None
+
 安装docker：
 curl -sSL https://get.docker.io | bash #版本是1.12.1, build 23cf638 
 
