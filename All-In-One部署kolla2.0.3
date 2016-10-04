@@ -2,7 +2,7 @@ kolla项目目前更新到3.0.0，而本实验部署的是kolla的tag2.0.3
 
 虚拟机基本环境：
 
-centos7.2双网卡
+centos7.2双网卡 
 docker版本：1.12.1
 ansible：1.9.6 #在2.0.3上ansible的版本不能高于2.0.0，在3.0.0上是允许的
 IP：192.168.101.46
@@ -227,7 +227,13 @@ cp -rv etc/kolla /etc/
 
 kolla-build --base centos --type source -p default
 #这边选择build基础的镜像，如果业务上需求，去掉-p default就build全部
-#如果出现build错误，可以单独build，
+#如果出现build错误，可以单独build，单独build步骤如下：（成功就不要这样做啦）
+vim /etc/kolla/kolla-build.conf 
+#install_type = binary #注释掉这个改成source
+install_type = source
+
+#配置中默认是centos的，所以没有改base，如果是ubuntu请自行更改
+#保存退出再build就可以build source镜像
 #镜像下来，就完成一大步啦
 
 vim /etc/kolla/passwords.yml
@@ -250,7 +256,8 @@ kolla-ansible post-deploy
 cat /etc/kolla/admin-openrc.sh 
 #查看dashboard的登录信息
 
-sourch /etc/kolla/admin-openrc.sh
+source /etc/kolla/admin-openrc.sh
+#加载环境变量
 
 kolla/tools/init-runonce
 #初始化一个镜像跟网络
