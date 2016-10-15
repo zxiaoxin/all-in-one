@@ -10,9 +10,8 @@ IP：192.168.101.46
 主机名：localhost
 ```
 
-* systemctl stop firewalld && systemctl disable firewalld
-        
-*实验环境下不想麻烦直接关闭防火墙了，如果是在服务器上要配置iptables保证安全*
+* systemctl stop firewalld && systemctl disable firewalld        
+*实验环境下不想麻烦直接关闭防火墙了，如果是在服务器上要配置iptables保证安全*<br>
 
 * vim /etc/hosts
 
