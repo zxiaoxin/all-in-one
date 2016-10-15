@@ -15,8 +15,8 @@ IP：192.168.101.46
 
 * vim /etc/hosts
  
-   192.168.101.46 localhost 
-   127.0.0.1 localhost
+   192.168.101.46 localhost<br> 
+   127.0.0.1 localhost<br>
 *安装依赖：*
 yum install -y epel-release 
 yum install -y python-pip
