@@ -13,10 +13,9 @@ IP：192.168.101.46
 * systemctl stop firewalld && systemctl disable firewalld        
 *实验环境下不想麻烦直接关闭防火墙了，如果是在服务器上要配置iptables保证安全*<br>
 
-* vim /etc/hosts
-
-        192.168.101.46 localhost 
-        127.0.0.1 localhost
+* vim /etc/hosts<br>
+ 192.168.101.46 localhost<br> 
+ 127.0.0.1 localhost<br>
 *安装依赖：*
 yum install -y epel-release 
 yum install -y python-pip
