@@ -16,14 +16,19 @@ IP：192.168.101.46
 * vim /etc/hosts<br> 
    192.168.101.46 localhost<br> 
    127.0.0.1 localhost<br>
+
 *安装依赖：*
+```
 yum install -y epel-release 
 yum install -y python-pip
 pip install --upgrade pip
 yum install -y python-devel libffi-devel openssl-devel gcc vim git python-setuptools wget
-安装ansible1.9.6：
-yum install ansible1.9.noarch #在这边ansible的版本不要高于2.0.0，不然在kolla-ansible检测时会报错
-
+```
+*安装ansible1.9.6：*<br>
+`yum install ansible1.9.noarch` <br>
+*在这边ansible的版本不要高于2.0.0，不然在kolla-ansible检测时会报错*<br>
+**执行结果：**<br>
+```
 [root@localhost ~]# yum install ansible1.9.noarch
 Loaded plugins: fastestmirror, langpacks
 Loading mirror speeds from cached hostfile
@@ -56,7 +61,7 @@ Complete!
 [root@localhost ~]# ansible --version
 ansible 1.9.6
   configured module search path = None
-
+```
 安装docker：
 curl -sSL https://get.docker.io | bash #版本是1.12.1, build 23cf638 
 
