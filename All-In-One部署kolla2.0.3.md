@@ -18,12 +18,12 @@ IP：192.168.101.46
    127.0.0.1 localhost<br>
 
 *安装依赖：*
-```
-yum install -y epel-release 
-yum install -y python-pip
-pip install --upgrade pip
-yum install -y python-devel libffi-devel openssl-devel gcc vim git python-setuptools wget
-```
+
+* yum install -y epel-release 
+* yum install -y python-pip
+* pip install --upgrade pip
+* yum install -y python-devel libffi-devel openssl-devel gcc vim git python-setuptools wget
+
 *安装ansible1.9.6：*<br>
 `yum install ansible1.9.noarch` <br>
 *在这边ansible的版本不要高于2.0.0，不然在kolla-ansible检测时会报错*<br>
