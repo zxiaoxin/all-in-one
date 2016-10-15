@@ -1,5 +1,6 @@
 kolla项目目前更新到3.0.0，而本实验部署的是kolla的tag2.0.3
-
+===
+```
 虚拟机基本环境：
 
 centos7.2双网卡 
@@ -7,7 +8,7 @@ docker版本：1.12.1
 ansible：1.9.6 #在2.0.3上ansible的版本不能高于2.0.0，在3.0.0上是允许的
 IP：192.168.101.46
 主机名：localhost
-
+```
 
 systemctl stop firewalld && systemctl disable firewalld
 #实验环境下不想麻烦直接关闭防火墙了，如果是在服务器上要配置iptables保证安全
