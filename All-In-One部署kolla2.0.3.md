@@ -25,7 +25,7 @@ IP：192.168.101.46
 * yum install -y python-devel libffi-devel openssl-devel gcc vim git python-setuptools wget
 
 *安装ansible1.9.6：*<br>
-`yum install ansible1.9.noarch` <br>
+* yum install ansible1.9.noarch <br>
 *在这边ansible的版本不要高于2.0.0，不然在kolla-ansible检测时会报错*<br>
 **执行结果：**<br>
 ```
@@ -62,9 +62,11 @@ Complete!
 ansible 1.9.6
   configured module search path = None
 ```
-安装docker：
-curl -sSL https://get.docker.io | bash #版本是1.12.1, build 23cf638 
-
+*安装docker：*<br>
+* curl -sSL https://get.docker.io | bash <br>
+*版本是1.12.1, build 23cf638*<br> 
+**执行结果：**<br>
+```
 [root@localhost ~]# curl -sSL https://get.docker.io | bash
 + sh -c 'sleep 3; yum -y -q install docker-engine'
 warning: /var/cache/yum/x86_64/7/docker-main-repo/packages/docker-engine-selinux-1.12.1-1.el7.centos.noarch.rpm: Header V4 RSA/SHA512 Signature, key ID 2c52609d: NOKEY
@@ -86,24 +88,30 @@ Remember that you will have to log out and back in for this to take effect!
 
 [root@localhost ~]# docker --version
 Docker version 1.12.1, build 23cf638
+```
 
-配置docker文件，启动MountFlags选项，默认未开启，未配置会在deploy时 neutron-dhcp-agent容器抛出APIError/HTTPError：
-mkdir -p /etc/systemd/system/docker.service.d
+**配置docker文件，启动MountFlags选项，默认未开启，未配置会在deploy时 neutron-dhcp-agent容器抛出APIError/HTTPError:**<br>
+* mkdir -p /etc/systemd/system/docker.service.d<br>
 
-tee /etc/systemd/system/docker.service.d/kolla.conf <<-'EOF'
-[Service]
-MountFlags=shared
-EOF
+* tee /etc/systemd/system/docker.service.d/kolla.conf <<-'EOF'
+* [Service]
+* MountFlags=shared
+* EOF
 
-加载配置文件设置自启，并启动docker服务：
-systemctl daemon-reload && systemctl enable docker && systemctl start docker
+*加载配置文件设置自启，并启动docker服务：<br>
+* systemctl daemon-reload && systemctl enable docker && systemctl start docker
 
+**执行结果：**<br>
+```
 [root@localhost ~]# systemctl daemon-reload && systemctl enable docker && systemctl start docker
 Created symlink from /etc/systemd/system/multi-user.target.wants/docker.service to /usr/lib/systemd/system/docker.service.
+```
 
-下载kolla代码：
-git clone https://git.openstack.org/openstack/kolla -b stable/mitaka
+*下载kolla代码：<br>
+* git clone https://git.openstack.org/openstack/kolla -b stable/mitaka
 
+**执行结果：**<br>
+```
 [root@localhost ~]# git clone https://git.openstack.org/openstack/kolla -b stable/mitaka
 Cloning into 'kolla'...
 remote: Counting objects: 42020, done.
@@ -111,10 +119,13 @@ remote: Compressing objects: 100% (22009/22009), done.
 remote: Total 42020 (delta 25059), reused 34193 (delta 18256)
 Receiving objects: 100% (42020/42020), 5.35 MiB | 277.00 KiB/s, done.
 Resolving deltas: 100% (25059/25059), done.
+```
 
-安装kolla：
-pip install kolla/ 
+*安装kolla：<br>
+* pip install kolla/ 
 
+**执行结果：**<br>
+```
 [root@localhost ~]# pip install kolla/
 Processing ./kolla
 Collecting pbr>=1.6 (from kolla==2.0.3.dev34)
@@ -166,19 +177,22 @@ Requirement already satisfied (use --upgrade to upgrade): ipaddress>=1.0.16; pyt
   Running setup.py install for wrapt ... done
   Running setup.py install for kolla ... done
 Successfully installed Babel-2.3.4 GitPython-2.0.8 Jinja2-2.8 backports.ssl-match-hostname-3.5.0.1 beautifulsoup4-4.5.1 debtcollector-1.8.0 docker-py-1.10.3 docker-pycreds-0.2.1 funcsigs-1.0.2 gitdb-0.6.4 graphviz-0.5.1 kolla-2.0.3.dev34 netaddr-0.7.18 oslo.config-3.17.0 oslo.i18n-3.9.0 pbr-1.10.0 pytz-2016.7 requests-2.10.0 rfc3986-0.4.1 smmap-0.9.0 stevedore-1.17.1 websocket-client-0.37.0 wrapt-1.10.8
+```
 
-进入kolla目录下
-cd kolla/
+*进入kolla目录下<br>
+* cd kolla/
 
-安装tox：
-pip install -U tox
+*安装tox：<br>
+* pip install -U tox
 
-安装openstackclient跟neutronclient
-pip install -U python-openstackclient python-neutronclient
+*安装openstackclient跟neutronclient<br>
+* pip install -U python-openstackclient python-neutronclient
 
-安装依赖
-pip install -r requirements.txt -r test-requirements.txt
+*安装依赖
+* pip install -r requirements.txt -r test-requirements.txt
 
+**执行结果：**<br>
+```
 [root@localhost kolla]# pip install -r requirements.txt -r test-requirements.txt
 Requirement already satisfied (use --upgrade to upgrade): pbr>=1.6 in /usr/lib/python2.7/site-packages (from -r requirements.txt (line 4))
 Requirement already satisfied (use --upgrade to upgrade): docker-py>=1.6.0 in /usr/lib/python2.7/site-packages (from -r requirements.txt (line 5))
@@ -206,10 +220,13 @@ Collecting bandit>=0.17.3 (from -r test-requirements.txt (line 4))
       Successfully uninstalled python-keystoneclient-3.5.0
   Running setup.py install for docutils ... done
 Successfully installed Pygments-2.1.3 argparse-1.4.0 bandit-1.1.0 bashate-0.5.1 docutils-0.12 extras-1.0.0 fixtures-3.0.0 flake8-2.5.5 futures-3.0.5 hacking-0.11.0 kazoo-2.2.1 linecache2-1.0.0 mccabe-0.2.1 mock-2.0.0 mox3-0.18.0 oslo.context-2.9.0 oslo.log-3.16.0 oslosphinx-4.7.0 oslotest-2.10.0 pep8-1.5.7 pyflakes-0.8.1 pyinotify-0.9.6 python-barbicanclient-4.1.0 python-ceilometerclient-2.6.1 python-dateutil-2.5.3 python-heatclient-1.5.0 python-keystoneclient-2.3.1 python-mimeparse-1.5.3 python-subunit-1.2.0 python-swiftclient-3.1.0 reno-1.8.0 requests-2.10.0 sphinx-1.2.3 testrepository-0.0.20 testscenarios-0.5.0 testtools-2.2.0 traceback2-1.4.0 unittest2-1.1.0 zake-0.2.2
+```
 
-生成kolla-build.conf配置文件：
-tox -e genconfig
+*生成kolla-build.conf配置文件：<br>
+* tox -e genconfig
 
+**执行结果：**<br>
+```
 [root@localhost kolla]# tox -e genconfig
 genconfig create: /root/kolla/.tox/genconfig
 genconfig installdeps: -r/root/kolla/requirements.txt, -r/root/kolla/test-requirements.txt
@@ -221,50 +238,60 @@ WARNING:stevedore.named:Could not load kolla
 _______________________________________________________________________________ summary _______________________________________________________________________________
   genconfig: commands succeeded
   congratulations :)
+```
 
-复制配置文件到/etc目录下
-cp -rv etc/kolla /etc/
+*复制配置文件到/etc目录下<br>
+* cp -rv etc/kolla /etc/
 
+**执行结果：**<br>
+```
 [root@localhost kolla]# cp -rv etc/kolla /etc/
 ‘etc/kolla’ -> ‘/etc/kolla’
 ‘etc/kolla/passwords.yml’ -> ‘/etc/kolla/passwords.yml’
 ‘etc/kolla/globals.yml’ -> ‘/etc/kolla/globals.yml’
 ‘etc/kolla/kolla-build.conf’ -> ‘/etc/kolla/kolla-build.conf’
+```
 
-kolla-build --base centos --type source -p default
-#这边选择build基础的镜像，如果业务上需求，去掉-p default就build全部
-#如果出现build错误，可以单独build，单独build步骤如下：（成功就不要这样做啦）
+* kolla-build --base centos --type source -p default<br>
+```
+这边选择build基础的镜像，如果业务上需求，去掉-p default就build全部
+如果出现build错误，可以单独build，单独build步骤如下：（成功就不要这样做啦）
 vim /etc/kolla/kolla-build.conf 
-#install_type = binary #注释掉这个改成source
+install_type = binary #注释掉这个改成source
 install_type = source
 
-#配置中默认是centos的，所以没有改base，如果是ubuntu请自行更改
-#保存退出再build就可以build source镜像
-#镜像下来，就完成一大步啦
+配置中默认是centos的，所以没有改base，如果是ubuntu请自行更改
+保存退出再build就可以build source镜像
+镜像下来，就完成一大步啦
+```
 
-vim /etc/kolla/passwords.yml
+* vim /etc/kolla/passwords.yml<br>
+```
 kolla_install_type: "source"
 kolla_internal_address: "192.168.101.147" #这个IP要跟端口同一个网段并且未被使用
 network_interface: "enp4s0.2"
 neutron_external_interface: "enp4s0.3"
+```
 
-kolla-genpwd
-#生成密码，也可以自己去配置
+* kolla-genpwd<br>
+*生成密码，也可以自己去配置
 
-kolla-ansible prechecks
-#检查端口，IP，ansible等配置
+* kolla-ansible prechecks<br>
+*检查端口，IP，ansible等配置
 
-kolla-ansible deploy #开始部署容器
-#没有错误就是成功啦
+* kolla-ansible deploy <br>
+```
+开始部署容器
+没有错误就是成功啦
+```
+* kolla-ansible post-deploy
 
-kolla-ansible post-deploy
+* cat /etc/kolla/admin-openrc.sh<br> 
+*查看dashboard的登录信息
 
-cat /etc/kolla/admin-openrc.sh 
-#查看dashboard的登录信息
+* source /etc/kolla/admin-openrc.sh<br>
+*加载环境变量
 
-source /etc/kolla/admin-openrc.sh
-#加载环境变量
-
-kolla/tools/init-runonce
-#初始化一个镜像跟网络
+* kolla/tools/init-runonce<br>
+*初始化一个镜像跟网络
 
