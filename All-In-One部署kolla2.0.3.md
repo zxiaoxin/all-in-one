@@ -265,7 +265,7 @@ install_type = source
 镜像下来，就完成一大步啦
 ```
 
-* vim /etc/kolla/passwords.yml<br>
+* vim /etc/kolla/globals.yml<br>
 ```
 kolla_install_type: "source"
 kolla_internal_address: "192.168.101.147" #这个IP要跟端口同一个网段并且未被使用
